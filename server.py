@@ -2,12 +2,12 @@ from flask import Flask, render_template, redirect, request
 from user import User
 app = Flask(__name__)
 
-# WORKS
+# DOESN'T WORK. SEEMS LIKE CONNECTION TO SQL SERVER IS BROKEN
 @app.route("/users")
 def show_users():
     users = User.get_all()
     print(users)
-    return render_template("read.html", users=users)
+    return render_template("read.html",users=users)
 
 # NEEDS TWEAKED
 @app.route('/add_user', methods=['POST'])
@@ -28,17 +28,17 @@ def create_page():
 
 
 # NONE OF THESE FUNCTIONS HAVE BEEN WRITTEN
-@app.route('/users/<int: id>')
+@app.route('/users/<int:id>')
 def show_single_user(id):
     # show a single user profile
     return render_template('single_user.html')
 
-@app.route('/users/<int: id>/edit')
+@app.route('/users/<int:id>/edit')
 def edit_a_user(id):
     # edit a user
     return render_template('edit.html')
 
-@app.route('/users/<int: id>/delete')
+@app.route('/users/<int:id>/delete')
 def remove_a_user(id):
     # delete the entry from the database and return to index page
     return redirect('/users')
