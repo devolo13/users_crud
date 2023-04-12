@@ -63,18 +63,5 @@ def remove_a_user(id):
     return redirect('/users')
 
 
-@app.route('/test')
-def test():
-    data = {
-        'id': 8,
-        'first_name': 'user',
-        'last_name': 'person',
-        'email': 'email',
-    }
-    user = User.update(data)
-    print(user)
-    return user
-
-
 if __name__ == "__main__":
     app.run(debug=True)
