@@ -10,20 +10,20 @@
   <title>Edit User {{user.id}}</title>
 </head>
 
-<!-- PAGE HAS NOT BEEN TESTED -->
-<!-- LOGIC MAY BE COMPLETELY WRONG -->
 <body class="container">
   <div class="d-flex justify-content-between mt-3">
     <h1>Add a New User</h1>
     <a href="/users" class="align-self-center">Home</a>
   </div>
+  <!-- FORM FOR EDITING A USER'S INFO PREPOPULATED WITH EXISTING USER INFO -->
   <form action="/update_user" method="post">
+    <input type="hidden" name="id" id="id" value="{{user.id}}">
     <label for="first_name" class="form-label my-2">First Name:</label>
-    <input type="text" name='first_name' id="first_name" class="form-control">
+    <input type="text" name='first_name' id="first_name" class="form-control" value='{{user.first_name}}'>
     <label for="last_name" class="form-label my-2">Last Name:</label>
-    <input type="text" name='last_name' id="last_name" class="form-control">
+    <input type="text" name='last_name' id="last_name" class="form-control" value='{{user.last_name}}'>
     <label for="email" class="form-label my-2">Email:</label>
-    <input type="text" name='email' id="email" class="form-control">
+    <input type="text" name='email' id="email" class="form-control" value="{{user.email}}">
     <div class="d-flex">
       <button class="btn btn-outline-primary my-3" type="submit">Update</button>
       <a href="/users/{{user.id}}" class="align-self-center mx-4">Show User</a>

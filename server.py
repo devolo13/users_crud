@@ -2,51 +2,79 @@ from flask import Flask, render_template, redirect, request
 from user import User
 app = Flask(__name__)
 
-# DOESN'T WORK. SEEMS LIKE CONNECTION TO SQL SERVER IS BROKEN
+
+# main page showing all users
 @app.route("/users")
 def show_users():
     users = User.get_all()
-    print(users)
-    return render_template("read.html",users=users)
+    return render_template("read.html", users=users)
 
-# NEEDS TWEAKED
-@app.route('/add_user', methods=['POST'])
-def create_user():
-    # create database entry
-    data = {
-        'first_name': request.form['first_name'],
-        'last_name': request.form['last_name'],
-        'email': request.form['email'],
-    }
-    User.save(data)
-    return redirect('/users/') # NEEDS USER ID IN URL
 
-# PROBABLY WORKS
+# Page showing a single user profile
+@app.route('/users/<int:id>')
+def show_single_user(id):
+    user = User.get_by_id(id)
+    return render_template('single_user.html', user=user)
+
+
+# Form to create a new user
 @app.route('/users/new')
 def create_page():
     return render_template('create.html')
 
 
-# NONE OF THESE FUNCTIONS HAVE BEEN WRITTEN
-@app.route('/users/<int:id>')
-def show_single_user(id):
-    # show a single user profile
-    return render_template('single_user.html')
-
+# Form for editing a user
 @app.route('/users/<int:id>/edit')
 def edit_a_user(id):
-    # edit a user
-    return render_template('edit.html')
+    user = User.get_by_id(id)
+    return render_template('edit.html', user=user)
 
+
+# create database entry for new user and redirect to that user's page
+@app.route('/add_user', methods=['POST'])
+def create_user():
+    data = {
+        'first_name': request.form['first_name'],
+        'last_name': request.form['last_name'],
+        'email': request.form['email'],
+    }
+    user = User.save(data)
+    return redirect('/users/' + str(user))
+
+
+# Updates database entry for a user and redirects to that user's page
+@app.route('/update_user', methods=['POST'])
+def update_a_user():
+    data = {
+        'id': request.form['id'],
+        'first_name': request.form['first_name'],
+        'last_name': request.form['last_name'],
+        'email': request.form['email'],
+    }
+    User.update(data)
+    return redirect('/users/' + str(request.form['id']))
+
+
+# Deletes database entry for a user then redirects to main page
 @app.route('/users/<int:id>/delete')
 def remove_a_user(id):
-    # delete the entry from the database and return to index page
+    data = {'id': id}
+    User.delete_by_id(data)
     return redirect('/users')
+
+
+@app.route('/test')
+def test():
+    data = {
+        'id': 8,
+        'first_name': 'user',
+        'last_name': 'person',
+        'email': 'email',
+    }
+    user = User.update(data)
+    print(user)
+    return user
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-# CHANGED EVERY FILE EXCEPT USER.PY AND MYSQLCONNECTION.PY
-# ASSUME ALL OF THEM ARE BROKEN. NOTHING HAS BEEN TESTED
